@@ -1,0 +1,15 @@
+# Development files
+node_modules/
+.env.local
+*.log
+
+# Git
+.git/
+.gitignore
+
+# Internal docs
+SETUP.md
+
+# Test artifacts
+*.test.ts
+*.spec.ts
