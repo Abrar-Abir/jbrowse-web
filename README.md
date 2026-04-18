@@ -2,6 +2,8 @@
 
 [![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
 [![Version](https://img.shields.io/badge/jbrowse-v4.1.14-green.svg)](https://github.com/GMOD/jbrowse-components/releases/tag/v4.1.14)
+[![npm](https://img.shields.io/npm/v/@abrarabir235/jbrowse-web)](https://www.npmjs.com/package/@abrarabir235/jbrowse-web)
+[![GitHub](https://img.shields.io/badge/github-Abrar--Abir%2Fjbrowse--web-blue?logo=github)](https://github.com/Abrar-Abir/jbrowse-web)
 
 A standalone, self-contained npm project for building custom [JBrowse 2 Web](https://jbrowse.org) genome browser applications — no monorepo required.
 
@@ -16,9 +18,17 @@ This repo extracts `products/jbrowse-web` at a pinned version (**v4.1.14**) and 
 - Node.js 18+
 - npm
 
-## Quick start
+## Install from npm
 
 ```bash
+npm install @abrarabir235/jbrowse-web
+```
+
+## Quick start (from source)
+
+```bash
+git clone https://github.com/Abrar-Abir/jbrowse-web.git
+cd jbrowse-web
 npm install
 npm start        # dev server → http://localhost:3000
 ```
