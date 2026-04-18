@@ -1,5 +1,5 @@
 {
-  "name": "@jbrowse/web",
+  "name": "@abrarabir235/jbrowse-web",
   "version": "4.1.14",
   "description": "A standalone, customizable JBrowse 2 Web genome browser for building genomic web applications",
   "type": "module",
