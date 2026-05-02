@@ -1,4 +1,21 @@
 #!/usr/bin/env bash
+#
+# Upgrade this standalone fork to a new upstream JBrowse tag.
+#
+# DESTRUCTIVE — run from a clean working tree only.
+# This script `rm -rf`s src/, scripts/, public/, webpack/, and tsconfig.json
+# before re-copying from the upstream tag. Any uncommitted changes in those
+# paths will be lost.
+#
+# Known footguns (verified against v4.1.14, see README "Upgrading"):
+#   - Removes scripts/upgrade.sh itself (its self-backup step runs after the
+#     rm and fails silently). Restore with `git checkout HEAD -- scripts/upgrade.sh`.
+#   - Wipes public/config.json (not part of upstream products/jbrowse-web/public/).
+#     Restore with `git checkout HEAD -- public/config.json`.
+#
+# Not idempotent: re-running against the same tag fails at the patch step,
+# since inputs are already patched. If you need to re-run, reset to a clean tree.
+
 set -euo pipefail
 
 VERSION="${1:-}"

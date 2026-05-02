@@ -29,7 +29,7 @@ This repo fills that gap. It extracts `products/jbrowse-web` at a pinned upstrea
 - All devDependencies (previously declared at the monorepo root) declared explicitly
 - Custom Node loader scripts replaced with [tsx](https://tsx.is/) so `npm start` and `npm run build` Just Work
 
-Clone it, `npm install`, `npm run build` — no pnpm, no monorepo. You own the source of `src/` and can modify any of it. See [Custom modifications](#custom-modifications) for an example of the kind of change this enables.
+Clone it, `npm install`, `npm run build` — no pnpm, no monorepo. You own the source of `src/` and can modify any of it. See [Customization](#customization) for the natural extension points.
 
 ## Prerequisites
 
@@ -72,11 +72,16 @@ import rootModel from '@gnomix/jbrowse-web/rootModel'
 import makeWorkerInstance from '@gnomix/jbrowse-web/makeWorkerInstance'
 ```
 
-## Custom modifications
+## Customization
 
-The following files differ from upstream JBrowse v4.1.14:
+Four natural extension points cover most needs:
 
-- **`src/components/JBrowse.tsx`** — Added a `postMessage` listener for `add-tracks` messages (inject tracks without reloading an iframe) and a `jbrowse-ready` signal to the parent window.
+- **[src/corePlugins.ts](src/corePlugins.ts)** — the 29-plugin array passed into `PluginManager`. Drop a plugin (e.g. remove `@jbrowse/plugin-circular-view` to disable circular views) or append your own `Plugin` subclass.
+- **[src/components/JBrowse.tsx](src/components/JBrowse.tsx)** — the app shell: `ThemeProvider`, `HeaderButtons`, and the admin-server snapshot listener. Swap `ShareButton` for a custom header element, or change the `/updateConfig` admin endpoint.
+- **[public/config.json](public/config.json)** — the assemblies and tracks loaded on boot. Replace the bundled hg38-only config with your own assembly/track set; see the [JBrowse config docs](https://jbrowse.org/jb2/docs/config_guides/assemblies/).
+- **[src/makeWorkerInstance.ts](src/makeWorkerInstance.ts)** — the worker entry (webpack-5 native worker module). Override to point at a pre-bundled worker or a test mock.
+
+Local diffs from upstream are tracked in [UPSTREAM.md](UPSTREAM.md).
 
 ## Upgrading
 
@@ -84,7 +89,32 @@ The following files differ from upstream JBrowse v4.1.14:
 bash scripts/upgrade.sh v4.2.0
 ```
 
-Review and re-apply any custom modifications afterward. See [Upgrading to a newer JBrowse version](#upgrading-to-a-newer-jbrowse-version) below for a manual walkthrough.
+**Prerequisites:** a clean working tree. The script is destructive — it `rm -rf`s `src/`, `scripts/`, `public/`, `webpack/`, and `tsconfig.json` before re-copying from the upstream tag, so any uncommitted changes in those paths will be lost.
+
+**What it does:** clones `GMOD/jbrowse-components` at `<version-tag>` into `/tmp/jbrowse-src`, replaces the directories above with their upstream copies, then re-applies the standalone patches: `workspace:^` → `^<version>` in `package.json`, monorepo-relative webpack imports rewritten in `scripts/build.ts` and `scripts/start.ts`, and `getWorkspaces()` in `webpack/config/webpack.config.ts` rewritten to a static `node_modules/@jbrowse` path.
+
+**Verified 2026-05-02 against `v4.1.14`** as a no-op upgrade. The script exits 0, but verification surfaced two known footguns worth restoring afterward:
+
+- `scripts/upgrade.sh` itself is removed (the `rm -rf scripts/` happens before the script's self-backup step, so the backup fails silently and the upstream `scripts/` copy doesn't include it).
+- `public/config.json` is wiped (this repo's bundled hg38 config is not part of upstream's `products/jbrowse-web/public/`).
+
+Both are tracked files, so on a clean tree they can be restored in one step:
+
+```bash
+git checkout HEAD -- scripts/upgrade.sh public/config.json
+```
+
+**After running:**
+
+1. `git checkout HEAD -- scripts/upgrade.sh public/config.json` to restore the two files above.
+2. Re-apply any custom modifications (see [UPSTREAM.md](UPSTREAM.md) for the current diff list).
+3. `npm install`
+4. `npm run build`
+5. Smoke-test with `npm start` and load `http://localhost:3000`.
+
+Note: the script is **not idempotent** — running it twice in a row will fail at the patch step, since the second run sees already-patched inputs. If you need to re-run, start from a clean tree.
+
+For a manual walkthrough, see [Upgrading to a newer JBrowse version](#upgrading-to-a-newer-jbrowse-version) below.
 
 ---
 
