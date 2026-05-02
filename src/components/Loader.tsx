@@ -151,7 +151,7 @@ const Renderer = observer(function Renderer({
 
   useEffect(() => {
     // Skip destroy in Jest since it interferes with test cleanup
-    const isJest = typeof jest !== 'undefined'
+    const isJest = typeof (globalThis as any).jest !== 'undefined'
     if (ready) {
       try {
         if (pluginManager.current?.rootModel && !isJest) {

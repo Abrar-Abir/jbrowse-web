@@ -440,7 +440,7 @@ export default function RootModel({
        * #method
        */
       menus() {
-        const preConfiguredSessions = readConfObject(
+        const preConfiguredSessions = (readConfObject as any)(
           self.jbrowse,
           'preConfiguredSessions',
         )

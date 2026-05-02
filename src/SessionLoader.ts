@@ -451,7 +451,6 @@ const SessionLoader = types
      */
     async loadSessionPluginsIfNeeded(sessionSnapshot: Record<string, unknown>) {
       if (!self.sessionPlugins) {
-        // @ts-expect-error
         await this.loadSession(sessionSnapshot)
       }
     },

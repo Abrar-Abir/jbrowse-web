@@ -41,7 +41,6 @@ export async function loadHubSpec(
       })),
     })
     const { session } = rootModel
-    // @ts-expect-error
     session.makeConnection(session.sessionConnections[0])
   } catch (e) {
     console.error(e)
