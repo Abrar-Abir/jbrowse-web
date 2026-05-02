@@ -8,6 +8,10 @@
 
 The official [JBrowse 2 Web](https://jbrowse.org) application is distributed only as a pre-built zip or as a React component for embedding — there is no supported way to fork and customize the standalone product. **This repo is that fork.**
 
+![Screenshot of JBrowse 2 Web displaying a sample configuration with reference sequence and feature tracks](jbrowse-screenshot.png)
+
+<sub>Screenshot from the [JBrowse 2 web quickstart](https://jbrowse.org/jb2/docs/quickstart_web/).</sub>
+
 ## Why this exists
 
 If you want to **customize the JBrowse Web application itself** — change its startup flow, add custom routes, modify the session loader, swap the admin server, embed it inside a larger product — your only option today is to clone the [jbrowse-components](https://github.com/GMOD/jbrowse-components) monorepo and work from there. That monorepo is a pnpm workspace of ~30 cross-referenced packages, with `workspace:^` dependency references, custom Node loaders, a shared webpack config that calls `pnpm recursive list` to discover packages, and devDependencies declared at the root rather than in `products/jbrowse-web`. You can't simply lift `products/jbrowse-web` out and run it — none of its dependencies resolve, none of the build scripts work, and the shared webpack config doesn't exist at the path it expects.
