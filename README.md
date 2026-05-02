@@ -1,17 +1,35 @@
 # jbrowse-web
 
+[![CI](https://github.com/Abrar-Abir/jbrowse-web/actions/workflows/ci.yml/badge.svg)](https://github.com/Abrar-Abir/jbrowse-web/actions/workflows/ci.yml)
 [![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
 [![Version](https://img.shields.io/badge/jbrowse-v4.1.14-green.svg)](https://github.com/GMOD/jbrowse-components/releases/tag/v4.1.14)
 [![npm](https://img.shields.io/npm/v/@abrarabir235/jbrowse-web)](https://www.npmjs.com/package/@abrarabir235/jbrowse-web)
 [![GitHub](https://img.shields.io/badge/github-Abrar--Abir%2Fjbrowse--web-blue?logo=github)](https://github.com/Abrar-Abir/jbrowse-web)
 
-A standalone, self-contained npm project for building custom [JBrowse 2 Web](https://jbrowse.org) genome browser applications — no monorepo required.
+The official [JBrowse 2 Web](https://jbrowse.org) application is distributed only as a pre-built zip or as a React component for embedding — there is no supported way to fork and customize the standalone product. **This repo is that fork.**
 
 ## Why this exists
 
-JBrowse Web lives inside a large pnpm monorepo ([jbrowse-components](https://github.com/GMOD/jbrowse-components)) with ~30 cross-referenced packages. Building a custom JBrowse-based application normally means cloning and managing that entire monorepo. There is no supported path to just run `jbrowse-web` on its own.
+If you want to **customize the JBrowse Web application itself** — change its startup flow, add custom routes, modify the session loader, swap the admin server, embed it inside a larger product — your only option today is to clone the [jbrowse-components](https://github.com/GMOD/jbrowse-components) monorepo and work from there. That monorepo is a pnpm workspace of ~30 cross-referenced packages, with `workspace:^` dependency references, custom Node loaders, a shared webpack config that calls `pnpm recursive list` to discover packages, and devDependencies declared at the root rather than in `products/jbrowse-web`. You can't simply lift `products/jbrowse-web` out and run it — none of its dependencies resolve, none of the build scripts work, and the shared webpack config doesn't exist at the path it expects.
 
-This repo extracts `products/jbrowse-web` at a pinned version (**v4.1.14**) and patches it into a self-contained npm project: workspace references replaced with published npm versions, build paths fixed, shared webpack config included locally, and all devDependencies declared explicitly. Clone it, `npm install`, and `npm run build` — no pnpm, no monorepo.
+The official alternatives don't fill this gap either:
+
+- **`jbrowse create`** ([docs](https://jbrowse.org/jb2/docs/quickstart_web/)) downloads a pre-built static zip. You get a working JBrowse Web instance, but you cannot modify the source — it's a binary distribution.
+- **`@jbrowse/react-app2`** ([docs](https://jbrowse.org/jb2/docs/embedded_components/)) is a React component meant to be dropped *into your own React app*. It is not the standalone jbrowse-web product: you don't get the session loader, IndexedDB session persistence, URL/share-link routing, the admin server `/updateConfig` flow, or the rest of jbrowse-web's app shell.
+- **`@jbrowse/react-linear-genome-view2` / `@jbrowse/react-circular-genome-view2`** are even more lightweight — single views you embed, not an application.
+- The JBrowse FAQ historically confirmed this directly: *"the jbrowse-web app is not available as an npm installable package yet."*
+
+  ![JBrowse FAQ entry "How can I make a header on a jbrowse-web instance" stating the jbrowse-web app is not available as an npm installable package yet](image.png)
+
+This repo fills that gap. It extracts `products/jbrowse-web` at a pinned upstream version (**v4.1.14**) and patches it into a self-contained npm project:
+
+- `workspace:^` references replaced with published `^4.1.14` versions of `@jbrowse/*` packages from npm
+- Shared webpack config copied in locally and the `pnpm recursive list` call replaced with a static path
+- Build script imports rewritten from `../../../webpack/...` to local paths
+- All devDependencies (previously declared at the monorepo root) declared explicitly
+- Custom Node loader scripts replaced with [tsx](https://tsx.is/) so `npm start` and `npm run build` Just Work
+
+Clone it, `npm install`, `npm run build` — no pnpm, no monorepo. You own the source of `src/` and can modify any of it. See [Custom modifications](#custom-modifications) for an example of the kind of change this enables.
 
 ## Prerequisites
 
@@ -43,7 +61,16 @@ npm start        # dev server → http://localhost:3000
 
 ## Configuration
 
-Place your `config.json` in `public/config.json`. JBrowse reads this on startup to load assemblies and tracks. See the [JBrowse config docs](https://jbrowse.org/jb2/docs/config_guides/assemblies/) for the full schema.
+A minimal default `public/config.json` ships with the repo — a single hg38 assembly using publicly hosted reference data — so `npm start` renders out of the box. Replace it with your own to load custom assemblies and tracks; see the [JBrowse config docs](https://jbrowse.org/jb2/docs/config_guides/assemblies/) for the full schema.
+
+## Consuming as an npm package
+
+The published `@abrarabir235/jbrowse-web` package exposes two named exports — `./rootModel` and `./makeWorkerInstance` — for downstream projects that want to embed or extend the app shell. Both point to **TypeScript source**, so consuming projects must use a TypeScript-aware bundler (webpack, Vite, esbuild, etc.) or loader (`tsx`, `ts-node`); raw Node cannot strip types from `node_modules`.
+
+```ts
+import rootModel from '@abrarabir235/jbrowse-web/rootModel'
+import makeWorkerInstance from '@abrarabir235/jbrowse-web/makeWorkerInstance'
+```
 
 ## Custom modifications
 
@@ -214,4 +241,8 @@ npm run serve   # http://localhost:4000
 
 ## Upstream
 
-Based on [GMOD/jbrowse-components](https://github.com/GMOD/jbrowse-components) v4.1.14.
+Based on [GMOD/jbrowse-components](https://github.com/GMOD/jbrowse-components) v4.1.14. Both this repo and upstream are licensed Apache-2.0; see [UPSTREAM.md](UPSTREAM.md) for the full derivative-work attribution, license relationship, and a complete list of differences from upstream.
+
+## Changelog
+
+See [CHANGELOG.md](CHANGELOG.md) for release notes.
