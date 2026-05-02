@@ -13,7 +13,7 @@ Initial release. Standalone extraction of [JBrowse Web](https://jbrowse.org) fro
 - `tsx`-based `start` and `build` scripts in place of upstream's custom Node loader; `npm start`, `npm run build`, and `npm run serve` work out of the box.
 - `add-tracks` `postMessage` listener and `jbrowse-ready` parent-window signal in `src/components/JBrowse.tsx` for iframe-embedded use.
 - Minimal `public/config.json` shipping a default hg38 assembly so a fresh clone renders without manual configuration.
-- Published as [`@abrarabir235/jbrowse-web`](https://www.npmjs.com/package/@abrarabir235/jbrowse-web) on npm with `./rootModel` and `./makeWorkerInstance` exports for downstream customization (TypeScript-aware bundler required).
+- Published as [`@gnomix/jbrowse-web`](https://www.npmjs.com/package/@gnomix/jbrowse-web) on npm with `./rootModel` and `./makeWorkerInstance` exports for downstream customization (TypeScript-aware bundler required).
 
 ### Changed
 

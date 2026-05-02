@@ -1,7 +1,10 @@
 {
-  "name": "@abrarabir235/jbrowse-web",
+  "name": "@gnomix/jbrowse-web",
   "version": "4.1.14",
   "description": "A standalone, customizable JBrowse 2 Web genome browser for building genomic web applications",
+  "publishConfig": {
+    "access": "public"
+  },
   "type": "module",
   "license": "Apache-2.0",
   "homepage": "https://github.com/Abrar-Abir/jbrowse-web#readme",

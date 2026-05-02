@@ -3,7 +3,7 @@
 [![CI](https://github.com/Abrar-Abir/jbrowse-web/actions/workflows/ci.yml/badge.svg)](https://github.com/Abrar-Abir/jbrowse-web/actions/workflows/ci.yml)
 [![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
 [![Version](https://img.shields.io/badge/jbrowse-v4.1.14-green.svg)](https://github.com/GMOD/jbrowse-components/releases/tag/v4.1.14)
-[![npm](https://img.shields.io/npm/v/@abrarabir235/jbrowse-web)](https://www.npmjs.com/package/@abrarabir235/jbrowse-web)
+[![npm](https://img.shields.io/npm/v/@gnomix/jbrowse-web)](https://www.npmjs.com/package/@gnomix/jbrowse-web)
 [![GitHub](https://img.shields.io/badge/github-Abrar--Abir%2Fjbrowse--web-blue?logo=github)](https://github.com/Abrar-Abir/jbrowse-web)
 
 The official [JBrowse 2 Web](https://jbrowse.org) application is distributed only as a pre-built zip or as a React component for embedding — there is no supported way to fork and customize the standalone product. **This repo is that fork.**
@@ -39,7 +39,7 @@ Clone it, `npm install`, `npm run build` — no pnpm, no monorepo. You own the s
 ## Install from npm
 
 ```bash
-npm install @abrarabir235/jbrowse-web
+npm install @gnomix/jbrowse-web
 ```
 
 ## Quick start (from source)
@@ -65,11 +65,11 @@ A minimal default `public/config.json` ships with the repo — a single hg38 ass
 
 ## Consuming as an npm package
 
-The published `@abrarabir235/jbrowse-web` package exposes two named exports — `./rootModel` and `./makeWorkerInstance` — for downstream projects that want to embed or extend the app shell. Both point to **TypeScript source**, so consuming projects must use a TypeScript-aware bundler (webpack, Vite, esbuild, etc.) or loader (`tsx`, `ts-node`); raw Node cannot strip types from `node_modules`.
+The published `@gnomix/jbrowse-web` package exposes two named exports — `./rootModel` and `./makeWorkerInstance` — for downstream projects that want to embed or extend the app shell. Both point to **TypeScript source**, so consuming projects must use a TypeScript-aware bundler (webpack, Vite, esbuild, etc.) or loader (`tsx`, `ts-node`); raw Node cannot strip types from `node_modules`.
 
 ```ts
-import rootModel from '@abrarabir235/jbrowse-web/rootModel'
-import makeWorkerInstance from '@abrarabir235/jbrowse-web/makeWorkerInstance'
+import rootModel from '@gnomix/jbrowse-web/rootModel'
+import makeWorkerInstance from '@gnomix/jbrowse-web/makeWorkerInstance'
 ```
 
 ## Custom modifications
