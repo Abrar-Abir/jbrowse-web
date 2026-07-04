@@ -1,0 +1,12 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`JBrowseWebSessionModel creates with no parent and just a name 1`] = `
+{
+  "drawerPosition": undefined,
+  "drawerWidth": undefined,
+  "focusedViewId": undefined,
+  "name": "testSession",
+  "sessionPlugins": [],
+  "views": [],
+}
+`;

@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: JBrowse-core bug or feature
+    url: https://github.com/GMOD/jbrowse-components/issues
+    about: Issues in JBrowse itself (rendering, view types, track adapters, plugins) belong upstream at GMOD/jbrowse-components — this repo only owns the standalone-npm packaging.
+  - name: JBrowse usage question
+    url: https://github.com/GMOD/jbrowse-components/discussions
+    about: General "how do I configure / use JBrowse" questions are best asked in the upstream discussions forum.
